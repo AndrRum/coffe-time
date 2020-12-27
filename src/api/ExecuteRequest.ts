@@ -1,5 +1,5 @@
 import axios from "axios"
-import { IRequestConfig } from "./User"
+import { IRequestConfig } from "./AuthUser"
 
 export const execRequest = (config: IRequestConfig): Promise<any | null> => {
     return new Promise((resolve, reject) => {

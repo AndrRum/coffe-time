@@ -19,7 +19,7 @@ const routes = {
     test: '/users'
 }
 
-const BASE_URL = 'http://ci2.dextechnology.com:8000/swagger/index.html'        //TODO: import later
+const BASE_URL = 'http://ci2.dextechnology.com:8000'        //TODO: import later
 
 export const createTestConfig = (): IRequestConfig => ({
     baseURL: BASE_URL,
