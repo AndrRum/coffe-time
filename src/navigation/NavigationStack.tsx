@@ -1,14 +1,12 @@
-import React from 'react'
-import {createStackNavigator} from '@react-navigation/stack'
-import {LoginScreen} from '../screens/LoginScreen'
-import { PasswordScreen } from '../screens/PasswordScreen'
-import { RegistrationScreen } from '../screens/RegistrationScreen'
-import {HomeScreen} from '../screens/HomeScreen'
+import React from 'react';
+import {createStackNavigator} from '@react-navigation/stack';
+import {LoginScreen} from '../screens/LoginScreen';
+import { RegistrationScreen } from '../screens/RegistrationScreen';
+import {HomeScreen} from '../screens/HomeScreen';
 
 
 type RootStackParamList = {
     LoginScreen: undefined,
-    PasswordScreen: undefined,
     RegistrationScreen: undefined,
     HomeScreen: undefined,
   };
@@ -33,14 +31,10 @@ const Stack = createStackNavigator<RootStackParamList>();
                         name= 'RegistrationScreen'
                         component={RegistrationScreen}
                     />
-                    <Stack.Screen 
-                        name= 'PasswordScreen' 
-                        component={PasswordScreen} 
-                    />
                     <Stack.Screen
                         name= 'HomeScreen'
                         component= {HomeScreen}
                     />
         </Stack.Navigator>
      )  
- }
+ };
