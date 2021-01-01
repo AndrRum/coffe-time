@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Text, Button, View, TextInput, StyleSheet } from 'react-native';
+import {Text, Button, View, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import { execRequest } from '../api/ExecuteRequest';
 import { createRegisterConfig } from '../api/AuthUser';
 import {useDispatch} from 'react-redux';
@@ -15,7 +15,7 @@ export const RegistrationScreen = (props: any) => {
 
     const [mailText,setMailText] = useState ("");
     const [pasText,setPasText] = useState ("");
-    const [secondPasText, setRepitePasText] = useState ("");
+    const [repitePasText, setRepitePasText] = useState ("");
 
 
     const [mailErr, setMailErr] = useState("");
@@ -48,19 +48,19 @@ export const RegistrationScreen = (props: any) => {
     };
 
     type typeErrFields = {
-        allRight: () => void,
+        rightData: () => void,
         onlyMailErr: () => void,
         onlyPasErr: () => void,
         onlyRepitePasErr: () => void,
-        onlyEmptyValue: () => void,
+        onlyEmptyValueErr: () => void,
     };
 
     const clearErrorsFieldsHandler: typeErrFields = {
-        allRight: () => {setMailErr(""), setPasErr(""), setRepitePasErr(""), setServerErr(""), setEmptyValueErr("") },
+        rightData: () => {setMailErr(""), setPasErr(""), setRepitePasErr(""), setServerErr(""), setEmptyValueErr("") },
         onlyMailErr: () => {setPasErr(""), setRepitePasErr(""), setServerErr(""), setEmptyValueErr("")},
         onlyPasErr: () => {setMailErr(""),  setRepitePasErr(""), setServerErr(""), setEmptyValueErr("")},
         onlyRepitePasErr: () => {setMailErr(""), setPasErr(""), setServerErr(""), setEmptyValueErr("")},
-        onlyEmptyValue: () => {setMailErr(""), setPasErr(""), setRepitePasErr(""), setServerErr("")},
+        onlyEmptyValueErr: () => {setMailErr(""), setPasErr(""), setRepitePasErr(""), setServerErr("")},
     };
 
     const mailString: string = mailText;
@@ -68,8 +68,8 @@ export const RegistrationScreen = (props: any) => {
     const pasLength: number = pasText.length; 
     const maxPassword: boolean = pasLength<=16;
     const minPassword: boolean = pasLength>=5;
-    const rightRepitePas: boolean = pasText===secondPasText;
-    const notEmptyValue: boolean = mailText!==""&&pasText!=="";
+    const rightRepitePas: boolean = pasText===repitePasText;
+    const notEmptyValue: boolean = mailText!==""&&pasText!==""&&repitePasText!=="";
 
     const validData: boolean = searchElement===true&&notEmptyValue&&maxPassword&&minPassword&&rightRepitePas;
 
@@ -84,11 +84,11 @@ export const RegistrationScreen = (props: any) => {
 
     const errorsHandler: typeErrors = {
 
-        emptyValue: mailText===""&&pasText==="",
+        emptyValue: mailText===""||pasText===""||repitePasText==="",
         errMail: searchElement===false,
         errPasswordMaxLength: pasLength>16,
         errPasswordMinLength: pasLength<5,
-        errRightRepitePas: pasText!==secondPasText,
+        errRightRepitePas: pasText!==repitePasText,
     };
 
     type typeMessagesError = {
@@ -132,32 +132,32 @@ export const RegistrationScreen = (props: any) => {
                 password: pasText,
             })).then(onRegisterSuccess).catch(onRegisterFailure);
             clearTextFieldsHandler.clearAllTextFields();
-            clearErrorsFieldsHandler.allRight();
+            clearErrorsFieldsHandler.rightData();
         }
 
-        if (errorsHandler.errMail) {
+        if (errorsHandler.emptyValue) {
+            setEmptyValueErr (errorsMessage.errMessageEmptyValue);
+            clearErrorsFieldsHandler.onlyEmptyValueErr();
+        }
+
+        if (errorsHandler.errMail&&!errorsHandler.emptyValue) {
             setMailErr (errorsMessage.errMessageMail);
             clearTextFieldsHandler.clearMailField();
             clearErrorsFieldsHandler.onlyMailErr();
         }
 
-        if (errorsHandler.errPasswordMaxLength) {
+        if (errorsHandler.errPasswordMaxLength&&!errorsHandler.emptyValue) {
             setPasErr (errorsMessage.errMessageMaxPas);
             clearTextFieldsHandler.clearPasAndRepitePasField();
             clearErrorsFieldsHandler.onlyPasErr();
         }
 
-        if (errorsHandler.errPasswordMinLength) {
+        if (errorsHandler.errPasswordMinLength&&!errorsHandler.emptyValue) {
             setPasErr (errorsMessage.errMessageMinPas);
             clearErrorsFieldsHandler.onlyPasErr();
         }
 
-        if (errorsHandler.emptyValue) {
-            setEmptyValueErr (errorsMessage.errMessageEmptyValue);
-            clearErrorsFieldsHandler.onlyEmptyValue();
-        }
-
-        if (errorsHandler.errRightRepitePas) {
+        if (errorsHandler.errRightRepitePas&&!errorsHandler.emptyValue) {
             setRepitePasErr(errorsMessage.errMessageRightRepitePas);
             clearTextFieldsHandler.clearPasAndRepitePasField();
             clearErrorsFieldsHandler.onlyRepitePasErr();
@@ -170,36 +170,76 @@ export const RegistrationScreen = (props: any) => {
     return (
         <View>
                 <TextInput
+                    style={styles.mailInput}
                     placeholder = 'Введите e-mail'
                     onChangeText = {textHandlers.changeLoginHandler}
                     value = {mailText}
                 />
                     <Text style={styles.errText}>{mailErr}{emptyValueErr}</Text>
+
                 <TextInput
+                    style={styles.pasInput}
                     placeholder = 'Введите пароль'
                     onChangeText = {textHandlers.changePasswordHandler}
                     value = {pasText}
                     secureTextEntry
                 />
                     <Text style={styles.errText}>{pasErr}{emptyValueErr}</Text>
+
                 <TextInput
+                    style={styles.repitePasInput}
                     placeholder = 'Повторите пароль'
                     onChangeText = {textHandlers.changeRepitePasswordHandler}
-                    value = {secondPasText}
+                    value = {repitePasText}
                     secureTextEntry
                 />
-                    <Text style={styles.errText}>{repitePasErr}{emptyValueErr}</Text>
+                    <Text style={styles.errText}>{emptyValueErr}{repitePasErr}</Text>
+
                     <Text style={styles.errText}> {serverErr}</Text>
-                <Button
-                    title = 'Подтвердить'
-                    onPress = {handleButtonPress}
-                />
+                
+                <TouchableOpacity
+                    onPress = {handleButtonPress}>
+                        <Text style={styles.confirmButton}>Подтвердить</Text>
+                </TouchableOpacity>
         </View>
     )
 };
 
 const styles=StyleSheet.create({
+
     errText: {
-        color: "red"
-    }
+        marginRight: 51,
+        color: "#9c434a",
+        alignSelf: "center",
+        fontWeight: "normal",
+        fontSize: 15
+    },
+    mailInput: {
+        marginTop: 180,
+        alignSelf: "center",
+        borderColor: "#b7c4df", 
+        borderWidth: 1.5,
+        width: 250,
+        fontSize: 17
+    },
+    pasInput: {
+        alignSelf: "center",
+        borderColor: "#b7c4df", 
+        borderWidth: 1.5,
+        width: 250,
+        fontSize: 17
+    },
+    repitePasInput: {
+        alignSelf: "center",
+        borderColor: "#b7c4df", 
+        borderWidth: 1.5,
+        width: 250,
+        fontSize: 17
+    },
+    confirmButton: {
+        color: "#7a97d8",
+        alignSelf: "center",
+        fontWeight: "bold",
+        fontSize: 25,
+    },
 });
