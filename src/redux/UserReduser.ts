@@ -1,23 +1,56 @@
-import {deleteText} from './actionCreators'
-import {saveText} from './actionCreators'
+export const SAVE_SESSIONID = 'SAVE_SESSIONID';
+export const SAVE_LOG_PAS = 'SAVE_LOG_PAS';
 
-export const initialState = {text: ''}
+
+interface initialState {
+    login: string,
+    password: string,
+    sessionId: any,
+}
+
+export const initialState = {
+    login: "",
+    password: "",
+    sessionId: "",
+};
+
+export const saveSessionId = (sessionId: any) => {
+    return {
+        type: SAVE_SESSIONID,
+        payload: sessionId
+    };
+};
+
+export const saveLogPas = (login: string, password: string) => {
+    return {
+        type: SAVE_LOG_PAS,
+        payload: login, password
+    };
+};
 
 export const UserReduser = (state = initialState, action: any) => {
     switch (action.type) {
 
-        case deleteText: {
-            return {text: ''}
+        case SAVE_SESSIONID: {
+            const newValue = action.payload
+            return {
+                
+                sessionId: newValue,
+            }
          }
 
-        case saveText: {
+        case SAVE_LOG_PAS: {
             const newValue = action.payload
-            return {text: newValue}
+            return {
+                ...state,
+                login: newValue,
+                password: newValue,
+            }
         }
 
         default: return state 
-    }
-}
+    };
+};
 
 // const initialState = {text: ''}
 
