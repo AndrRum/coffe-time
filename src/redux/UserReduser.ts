@@ -1,11 +1,11 @@
-export const SAVE_SESSIONID = 'SAVE_SESSIONID';
-export const SAVE_LOG_PAS = 'SAVE_LOG_PAS';
+export const SAVE_SESSIONID = "SAVE_SESSIONID";
+export const SAVE_LOG_PAS = "SAVE_LOG_PAS";
 
 
 interface initialState {
     login: string,
     password: string,
-    sessionId: any,
+    sessionId: string,
 }
 
 export const initialState = {
@@ -14,7 +14,7 @@ export const initialState = {
     sessionId: "",
 };
 
-export const saveSessionId = (sessionId: any) => {
+export const saveSessionId = (sessionId: string) => {
     return {
         type: SAVE_SESSIONID,
         payload: sessionId
@@ -34,12 +34,13 @@ export const UserReduser = (state = initialState, action: any) => {
         case SAVE_SESSIONID: {
             const newValue = action.payload
             return {
-                
+
                 sessionId: newValue,
             }
          }
 
         case SAVE_LOG_PAS: {
+            
             const newValue = action.payload
             return {
                 ...state,
@@ -51,36 +52,3 @@ export const UserReduser = (state = initialState, action: any) => {
         default: return state 
     };
 };
-
-// const initialState = {text: ''}
-
-// //actions
-// const CLEAR_TEXT = 'clear textInput field'
-// const UPDATE_TEXT = 'update text'
-
-// //actionCreators
-// export const clearText = () => {
-//     return {
-//         type: CLEAR_TEXT,
-//     }
-// }
-// export const updateText = text => {
-//     return {
-//         type: UPDATE_TEXT,
-//         payload: text
-//     }
-// }
-
-
-// export const rootReduser = (state = initialState, action) => {
-//     switch (action.type) {
-//         case CLEAR_TEXT: {
-//             return {text: ''}
-//         }
-
-//         case UPDATE_TEXT: {
-//             const newValue = action.payload
-//             return {text: newValue}
-//         }
-//         default: return state 
-//     }

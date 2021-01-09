@@ -1,54 +1,249 @@
-import React, {useState} from 'react'
-import {TextInput, View, Button, TouchableOpacity, Text, StyleSheet} from 'react-native'
+import  React, {useState} from "react";
+import {TextInput, View, StyleSheet, TouchableOpacity, Text, ImageBackground, Image } from "react-native";
+import { execRequest } from "../api/ExecuteRequest";
+import { createAuthConfig } from "../api/AuthUser";
+import {useDispatch} from "react-redux";
+import {saveSessionId} from "../redux/UserReduser";
+import LinearGradient from "react-native-linear-gradient";
+
+
 
 
 export const LoginScreen = (props: any) => {
 
-    const navigation = props.navigation
+    const navigation = props.navigation; 
+    const dispatch = useDispatch();
 
-    const [text, setText] = useState<string>('')
+    const [mail, setMail] = useState("");
+    const [pas, setPas] = useState("");
+    const [authErr, setAuthErr] = useState("");
+    const [errEmptyValue, setErrEmptyValue] = useState("");
 
-    const textChangeHandler = (text: string) => {
-        setText(text)
-    }
+    const mailChangeHandler = (text: string) => {
+        setMail(text);
+    };
 
-    const buttonInputHandler = () => {
-        navigation.navigate('PasswordScreen')
-    }
+    const pasChangeHandler = (text: string) => {
+        setPas(text);
+    };
+
+    type typeErrFields = {
+        rightData: () => void,
+        onlyAuthErr: () => void,
+        onlyErrEmptyValue: () => void,
+    };
+
+    const clearFieldsHandler: typeErrFields = {
+        rightData: () => {setMail(""), setPas(""), setAuthErr(""), setErrEmptyValue("") },
+        onlyAuthErr: () => {setMail(""), setPas(""), setErrEmptyValue("")},
+        onlyErrEmptyValue: () => {setMail(""), setPas(""), setAuthErr("")},
+    };
+    
+    const sessionId = "";
+
+    const onLoginSuccess = (result: any): void => {
+        console.log(result);
+        dispatch(saveSessionId(sessionId));
+        navigation.navigate("HomeScreen");
+        clearFieldsHandler.rightData();
+    };
+
+    const onLoginFailure = (reason: any): void => {
+        console.log(reason);
+        setAuthErr("  Логин и/или пароль не совпадают");
+        clearFieldsHandler.onlyAuthErr();
+    };
+
+    const emptyValue = mail===""||pas==="";
+
+    const handleNavigate = ():void => {
+
+        if (!emptyValue)
+        execRequest(createAuthConfig({
+            email: mail,
+            password: pas,
+        })).then(onLoginSuccess).catch(onLoginFailure);
+        else {
+            setErrEmptyValue("  Заполните все поля формы");
+            clearFieldsHandler.onlyErrEmptyValue();
+        }
+    };
 
 
-    const textButtonHandler = () => {
-        navigation.navigate('RegistrationScreen')
-    }
+    const textButtonHandler = (): void => {
+        navigation.navigate("RegistrationScreen");
+    };
 
     return (
+
         <View>
-            <TextInput
-                onChangeText = {textChangeHandler}
-                value = {text}
-                placeholder = 'Введите логин'
-            />
-            <Button
-                title = 'Подтвердить'
-                onPress = {buttonInputHandler}
-            />
-            <Button 
-                title={'Регистрация'}
-                onPress={textButtonHandler}
-                color='darkred'
-            />
-        </View>
+            <ImageBackground 
+                source={require("../assets/pictures/backGr.png")}
+                style={styles.backImage}>
+                <LinearGradient 
+                    colors = {["rgba(0,0,0,0)", "rgba(243,233,216,0.79)"]} 
+                    style={styles.linearGradient}>
+                        <Text style={styles.logo}>CoffeTime</Text>
+                        <Text style={styles.secLogo}>территория кофе</Text>
+                        <TextInput 
+                            style={styles.textMailInput}
+                            onChangeText = {mailChangeHandler}
+                            value = {mail} 
+                            placeholder = {`Введите e-mail`}
+                            placeholderTextColor = "white"
+                        />
+                            <Text style={styles.errText}>{errEmptyValue}</Text>
+                        <TextInput 
+                            style={styles.textPasInput}
+                            onChangeText = {pasChangeHandler}
+                            value = {pas}
+                            placeholder = {`Введите пароль`}
+                            placeholderTextColor = "white"
+                            secureTextEntry
+                        />
+                            <Text style={styles.errText}>{authErr}{errEmptyValue}</Text>
+                            
+                                <TouchableOpacity
+                                    onPress = {handleNavigate}
+                                    style={styles.confirmButton}>
+                                        <Text style={styles.confirmTextButton}>Подтвердить</Text>
+                                 </TouchableOpacity>
+
+                                <TouchableOpacity
+                                    onPress = {textButtonHandler}
+                                    style = {styles.regButton}>
+                                        <Text style={styles.regTextButton}>Регистрация</Text>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity
+                                    style = {styles.buttonFB}>
+                                        <View style = {styles.FBAll}>
+                                            <Image source = {require("../assets/pictures/icon_facebook.png")}
+                                                   style = {styles.imageFB}/> 
+                                                <Text style = {styles.textButtonFB}>Войти через Facebook</Text>
+                                        </View> 
+                                </TouchableOpacity>
+                </LinearGradient>
+            </ImageBackground>  
+        </View>  
     )
-}
+};
 
 const styles=StyleSheet.create({
-    container: {
 
+   backImage: {
+        height: 667,
+        width: 375,
     },
-    text: {
-
+    linearGradient: {
+        height: 667,
+        width: 375,
     },
-    textButton: {
-        
+    errText: {
+        color: "#b83030",
+        alignSelf: "center",
+        fontFamily: "SFUIText-Medium",
+        fontSize: 11.2,
+        backgroundColor: "rgba(193,183,153,0.47)",
+        width: 300,
     },
-})
+    logo: {
+        fontFamily: "Lobster-Regular",
+        fontSize: 62,
+        color: "white",
+        alignSelf: "center",
+        marginTop: 80,
+        textShadowColor: 'rgba(0, 0, 0, 0.75)',
+        textShadowOffset: {width: -1, height: 1},
+        textShadowRadius: 10,
+    },
+    secLogo: {
+        fontFamily: "SFUIText-Light",
+        fontSize: 16,
+        color: "white",
+        marginLeft: 157,
+        marginTop: -31,
+        textShadowColor: 'rgba(0, 0, 0, 0.75)',
+        textShadowOffset: {width: -1, height: 1},
+        textShadowRadius: 10,
+    },
+    textMailInput: {
+        marginTop: 80,
+        alignSelf: "center",
+        backgroundColor: "rgba(193,183,153,0.55)",
+        borderColor: "#ffffff", 
+        borderWidth: 0,
+        width: 300,
+        height: 37,
+        fontSize: 16,
+        color: "white",
+        fontFamily: "SFUIText-Medium",
+    },
+    textPasInput: {
+        marginTop: 10,
+        backgroundColor: "rgba(193,183,153,0.55)",
+        alignSelf: "center",
+        borderColor: "#ffffff", 
+        borderWidth: 0,
+        height: 37,
+        width: 300,
+        fontSize: 16,
+        color: "white",
+        fontFamily: "SFUIText-Medium",
+    },
+    confirmButton: {
+        margin: 18,
+        alignSelf: "center",
+        backgroundColor: "#b5cc93",
+        borderRadius: 100,
+        width: 300,
+        height: 52,
+    },
+    confirmTextButton: {
+        color: "white",
+        alignSelf: "center",
+        marginTop: 10,
+        fontSize: 22,
+        fontFamily: "SFUIText-Medium",
+    },
+    regButton: {
+        marginBottom: 25,
+        alignSelf: "center",
+        backgroundColor: "#b5cc93",
+        borderRadius: 100,
+        width: 300,
+        height: 52,
+    },
+    regTextButton: {
+        color: "white",
+        alignSelf: "center",
+        marginTop: 10,
+        fontSize: 22,
+        fontFamily: "SFUIText-Medium",
+    },
+    FBAll: {
+        flexDirection: "row",
+        justifyContent: "space-around",
+    },
+    buttonFB: {
+        marginTop: 40,
+        alignSelf: "center",
+        backgroundColor: "#3B5998",
+        borderRadius: 100,
+        width: 300,
+        height: 52,
+    },
+    textButtonFB: {
+        color: "white",
+        alignSelf: "center",
+        fontSize: 18,
+        fontFamily: "SFUIText-Medium",
+        marginRight: 28,
+        marginTop: 10,
+    },
+    imageFB: {
+        marginTop: 13,
+        marginLeft: 30,
+        alignSelf: "center",
+    }
+});

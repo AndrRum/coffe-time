@@ -1,9 +1,10 @@
-import React, {useState} from 'react';
-import {Text, Button, View, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
-import { execRequest } from '../api/ExecuteRequest';
-import { createRegisterConfig } from '../api/AuthUser';
-import {useDispatch} from 'react-redux';
-import {saveText} from '../redux/actionCreators';
+import React, {useState} from "react";
+import {Text,  View, TextInput, StyleSheet, TouchableOpacity, ImageBackground, Image,  } from "react-native";
+import { execRequest } from "../api/ExecuteRequest";
+import { createRegisterConfig } from "../api/AuthUser";
+import {useDispatch} from "react-redux";
+import {saveLogPas,saveSessionId} from "../redux/UserReduser";
+import LinearGradient from "react-native-linear-gradient";
 
 
 
@@ -23,7 +24,6 @@ export const RegistrationScreen = (props: any) => {
     const [repitePasErr, setRepitePasErr] = useState("");
     const [serverErr,setServerErr] = useState("");
     const [emptyValueErr,setEmptyValueErr] = useState("");
-
 
     const textHandlers = {
         changeLoginHandler: (text:string) => {setMailText(text.trim())},
@@ -111,15 +111,17 @@ export const RegistrationScreen = (props: any) => {
         errMessageServer: "Данные логин и пароль уже использованы"
     };
     
+    let sessionId: string = "ca2e8529-5242-4b07-b73e-0e68d15deb0b";
 
     const onRegisterSuccess = (result: any): void => {
-        (JSON.stringify(result));
+        console.log(result);
+        dispatch(saveSessionId(sessionId));
+        dispatch(saveLogPas(mailText, pasText));
         navigation.navigate("HomeScreen");
-        dispatch(saveText(mailText, pasText));
     };
 
     const onRegisterFailure = (reason: any): void => {
-        (JSON.stringify(reason));
+        console.log(reason);
         setServerErr(errorsMessage.errMessageServer);
     };
 
@@ -168,78 +170,154 @@ export const RegistrationScreen = (props: any) => {
 
 
     return (
+
         <View>
-                <TextInput
-                    style={styles.mailInput}
-                    placeholder = 'Введите e-mail'
-                    onChangeText = {textHandlers.changeLoginHandler}
-                    value = {mailText}
-                />
-                    <Text style={styles.errText}>{mailErr}{emptyValueErr}</Text>
+            <ImageBackground source={require("../assets/pictures/backGr.png")}
+                             style={styles.backImage}>
+                <LinearGradient 
+                             colors = {["rgba(0,0,0,0)", "rgba(243,233,216,0.79)"]} 
+                             style={styles.linearGradient}>
+                        <Text style={styles.logo}>CoffeTime</Text>
+                        <Text style={styles.secLogo}>территория кофе</Text>
+                            <TouchableOpacity>
+                                <Image source = {require("../assets/pictures/user_borders.png")}
+                                       style = {styles.imageAvatar}
+                                />
+                            </TouchableOpacity>
+                            <TextInput
+                                style={styles.mailInput}
+                                placeholder = "Введите e-mail"
+                                onChangeText = {textHandlers.changeLoginHandler}
+                                value = {mailText}
+                                placeholderTextColor = "white"
+                            />
 
-                <TextInput
-                    style={styles.pasInput}
-                    placeholder = 'Введите пароль'
-                    onChangeText = {textHandlers.changePasswordHandler}
-                    value = {pasText}
-                    secureTextEntry
-                />
-                    <Text style={styles.errText}>{pasErr}{emptyValueErr}</Text>
+                            <Text style={styles.errText}>{mailErr}{emptyValueErr}</Text>
 
-                <TextInput
-                    style={styles.repitePasInput}
-                    placeholder = 'Повторите пароль'
-                    onChangeText = {textHandlers.changeRepitePasswordHandler}
-                    value = {repitePasText}
-                    secureTextEntry
-                />
-                    <Text style={styles.errText}>{emptyValueErr}{repitePasErr}</Text>
+                            <TextInput
+                                style={styles.pasInput}
+                                placeholder = "Введите пароль"
+                                onChangeText = {textHandlers.changePasswordHandler}
+                                value = {pasText}
+                                secureTextEntry
+                                placeholderTextColor = "white"
+                            />
 
-                    <Text style={styles.errText}> {serverErr}</Text>
+                            <Text style={styles.errText}>{pasErr}{emptyValueErr}</Text>
+
+                            <TextInput
+                                style={styles.repitePasInput}
+                                placeholder = "Повторите пароль"
+                                onChangeText = {textHandlers.changeRepitePasswordHandler}
+                                value = {repitePasText}
+                                secureTextEntry
+                                placeholderTextColor = "white"
+                            />
+
+                            <Text style={styles.errText}>{emptyValueErr}{repitePasErr}{serverErr}</Text>
                 
-                <TouchableOpacity
-                    onPress = {handleButtonPress}>
-                        <Text style={styles.confirmButton}>Подтвердить</Text>
-                </TouchableOpacity>
-        </View>
+                            <TouchableOpacity
+                                onPress = {handleButtonPress}
+                                style={styles.confirmButton}>
+                                <Text style={styles.confirmTextButton}>Подтвердить</Text>
+                            </TouchableOpacity>
+                </LinearGradient>
+            </ImageBackground>  
+        </View>  
     )
 };
 
 const styles=StyleSheet.create({
 
     errText: {
-        marginRight: 51,
-        color: "#9c434a",
+        color: "#b83030",
         alignSelf: "center",
-        fontWeight: "normal",
-        fontSize: 15
+        fontFamily: "SFUIText-Medium",
+        fontSize: 11.2,
+        backgroundColor: "rgba(153,143,113,0.47)",
+        width: 300,
+    },
+    backImage: {
+        height: 667,
+        width: 375,
+    },
+    linearGradient: {
+        height: 667,
+        width: 375,
+    },
+    logo: {
+        fontFamily: "Lobster-Regular",
+        fontSize: 62,
+        color: "white",
+        alignSelf: "center",
+        marginTop: 70,
+        textShadowColor: 'rgba(0, 0, 0, 0.75)',
+        textShadowOffset: {width: -1, height: 1},
+        textShadowRadius: 10
+    },
+    secLogo: {
+        fontFamily: "SFUIText-Light",
+        fontSize: 16,
+        color: "white",
+        marginLeft: 157,
+        marginTop: -31,
+        textShadowColor: 'rgba(0, 0, 0, 0.75)',
+        textShadowOffset: {width: -1, height: 1},
+        textShadowRadius: 10
+    },
+    imageAvatar: {
+        alignSelf: "center",
+        marginTop: 30,
     },
     mailInput: {
-        marginTop: 180,
+        marginTop: 30,
+        backgroundColor: "rgba(153,143,113,0.55)",
         alignSelf: "center",
-        borderColor: "#b7c4df", 
-        borderWidth: 1.5,
-        width: 250,
-        fontSize: 17
+        borderColor: "#ffffff", 
+        borderWidth: 0,
+        height: 37,
+        width: 300,
+        fontSize: 16,
+        color: "white",
+        fontFamily: "SFUIText-Medium"
     },
     pasInput: {
+        marginTop: 10,
+        backgroundColor: "rgba(153,143,113,0.55)",
         alignSelf: "center",
-        borderColor: "#b7c4df", 
-        borderWidth: 1.5,
-        width: 250,
-        fontSize: 17
+        borderColor: "#ffffff", 
+        borderWidth: 0,
+        height: 37,
+        width: 300,
+        fontSize: 16,
+        color: "white",
+        fontFamily: "SFUIText-Medium"
     },
     repitePasInput: {
+        marginTop: 10,
+        backgroundColor: "rgba(153,143,113,0.55)",
         alignSelf: "center",
-        borderColor: "#b7c4df", 
-        borderWidth: 1.5,
-        width: 250,
-        fontSize: 17
+        borderColor: "#ffffff", 
+        borderWidth: 0,
+        height: 37,
+        width: 300,
+        fontSize: 16,
+        color: "white",
+        fontFamily: "SFUIText-Medium"
     },
     confirmButton: {
-        color: "#7a97d8",
+        margin: 30,
         alignSelf: "center",
-        fontWeight: "bold",
-        fontSize: 25,
+        backgroundColor: "#99b372",
+        borderRadius: 100,
+        width: 300,
+        height: 52
+    },
+    confirmTextButton: {
+        color: "white",
+        alignSelf: "center",
+        marginTop: 10,
+        fontSize: 22,
+        fontFamily: "SFUIText-Medium"
     },
 });
