@@ -1,17 +1,20 @@
-export const SAVE_SESSIONID = "SAVE_SESSIONID";
-export const SAVE_LOG_PAS = "SAVE_LOG_PAS";
+const SAVE_SESSIONID = "SAVE_SESSIONID";
+const SAVE_LOG_PAS = "SAVE_LOG_PAS";
+const SAVE_IMAGE = "SAVE_IMAGE_OR_PHOTO";
 
 
 interface initialState {
     login: string,
     password: string,
     sessionId: string,
+    imageObj: object,
 }
 
-export const initialState = {
+const initialState = {
     login: "",
     password: "",
     sessionId: "",
+    imageObj: {}
 };
 
 export const saveSessionId = (sessionId: string) => {
@@ -27,6 +30,13 @@ export const saveLogPas = (login: string, password: string) => {
         payload: login, password
     };
 };
+
+export const saveImage = (imageObj: object) => {
+    return {
+        type: SAVE_IMAGE,
+        payload: imageObj
+    }
+}
 
 export const UserReduser = (state = initialState, action: any) => {
     switch (action.type) {
@@ -46,6 +56,13 @@ export const UserReduser = (state = initialState, action: any) => {
                 ...state,
                 login: newValue,
                 password: newValue,
+            }
+        }
+
+        case SAVE_IMAGE: {
+            const newValue = action.payload
+            return {
+                imageObj: newValue
             }
         }
 
