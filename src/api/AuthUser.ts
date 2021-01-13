@@ -21,13 +21,6 @@ const routes = {
 
 const BASE_URL = 'http://ci2.dextechnology.com:8000'        //TODO: import later
 
-export const createTestConfig = (): IRequestConfig => ({
-    baseURL: BASE_URL,
-    url: routes.test,
-    data: null,
-    method: 'GET',
-})
-
 export const createRegisterConfig = (data: IAuthData): IRequestConfig => ({
     url: routes.register,
     method: "post",
@@ -36,7 +29,7 @@ export const createRegisterConfig = (data: IAuthData): IRequestConfig => ({
     headers: { "Content-Type": "application/json" }
 })
 
-const createAuthConfig = (data: IAuthData): IRequestConfig => ({
+export const createAuthConfig = (data: IAuthData): IRequestConfig => ({
     url: routes.auth,
     method: "post",
     baseURL: BASE_URL,
