@@ -1,10 +1,23 @@
-import React, {useState} from "react";
-import {Text,  View, TextInput, StyleSheet, TouchableOpacity, ImageBackground, Image,  } from "react-native";
+import React, {useState, useRef} from "react";
+import {Text,  
+        View,  
+        TextInput, 
+        StyleSheet, 
+        TouchableOpacity, 
+        ImageBackground, 
+        Image, 
+        Alert,
+        KeyboardAvoidingView,
+        ScrollView} from "react-native";
 import { execRequest } from "../api/ExecuteRequest";
 import { createRegisterConfig } from "../api/AuthUser";
 import {useDispatch} from "react-redux";
-import {saveLogPas,saveSessionId} from "../redux/UserReduser";
+import {saveLogPas,saveSessionId,saveImage} from "../redux/UserReduser";
 import LinearGradient from "react-native-linear-gradient";
+import BottomSheet from "reanimated-bottom-sheet";
+import ImagePicker from "react-native-image-crop-picker";
+import Animated from "react-native-reanimated";
+import { Icon } from "react-native-elements";
 
 
 
@@ -13,6 +26,67 @@ export const RegistrationScreen = (props: any) => {
     const navigation = props.navigation;
 
     const dispatch = useDispatch();
+
+
+    const refRBSheet: any = useRef();
+    const fall = new Animated.Value(1);
+
+    const [photo,setPhoto] = useState(require("../assets/pictures/user_borders.png"));
+
+    const e: any = () => { 
+        Alert.alert("Не удалось загрузить фото");
+    };
+
+    const takePhotoFromGallery = () => {
+        ImagePicker.openPicker({
+            width: 142,
+            height: 142,
+            cropping: true
+          }).then(photo => {
+            console.log(photo);
+            const imageObj = {
+                uri: photo.path
+            };
+            setPhoto(imageObj);
+            dispatch(saveImage(imageObj));
+            refRBSheet.current.snapTo(1);
+          }).catch(e)
+    };
+
+    const takePhotoFromCamera = () => {
+        ImagePicker.openCamera({
+            width: 142,
+            height: 142,
+            cropping: true,
+          }).then(photo => {
+            console.log(photo);
+            const imageObj = {
+                uri: photo.path
+            };
+            setPhoto(imageObj);
+            dispatch(saveImage(imageObj));
+            refRBSheet.current.snapTo(1);
+          }).catch(e)
+    };
+
+
+    const renderContent = () => (
+        <ImageBackground source={require("../assets/pictures/bottomPic.jpg")}
+                         style={styles.backBottomImage}>
+            <View style={styles.bottomSheet}>
+                <TouchableOpacity
+                    style={styles.galleryPhotoButton}
+                    onPress={takePhotoFromGallery}>
+                        <Text style={styles.textGalleryButton}>Фото из галереи</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={styles.cameraPhotoButton}
+                    onPress={takePhotoFromCamera}>
+                        <Text style={styles.textCameraButton}>Фото с камеры</Text>
+                </TouchableOpacity>
+            </View>
+        </ImageBackground>
+    );
 
     const [mailText,setMailText] = useState ("");
     const [pasText,setPasText] = useState ("");
@@ -24,6 +98,8 @@ export const RegistrationScreen = (props: any) => {
     const [repitePasErr, setRepitePasErr] = useState("");
     const [serverErr,setServerErr] = useState("");
     const [emptyValueErr,setEmptyValueErr] = useState("");
+
+    const [passwordSecured, setPasswordSecured] = useState(true);
 
     const textHandlers = {
         changeLoginHandler: (text:string) => {setMailText(text.trim())},
@@ -110,8 +186,12 @@ export const RegistrationScreen = (props: any) => {
         errMessageRightRepitePas: "Пароли не совпадают",
         errMessageServer: "Данные логин и пароль уже использованы"
     };
+
+    const passwordSecuredHandler = (): void => {
+        setPasswordSecured(!passwordSecured);
+    };
     
-    let sessionId: string = "ca2e8529-5242-4b07-b73e-0e68d15deb0b";
+    let sessionId: string = "";
 
     const onRegisterSuccess = (result: any): void => {
         console.log(result);
@@ -171,72 +251,107 @@ export const RegistrationScreen = (props: any) => {
 
     return (
 
-        <View>
-            <ImageBackground source={require("../assets/pictures/backGr.png")}
-                             style={styles.backImage}>
-                <LinearGradient 
+        <ScrollView
+            keyboardShouldPersistTaps="handled" 
+            showsVerticalScrollIndicator={false}>
+            <KeyboardAvoidingView  enabled>
+                <View>
+                    <ImageBackground source={require("../assets/pictures/backGr.png")}
+                                     style={styles.backImage}>
+                        <LinearGradient 
                              colors = {["rgba(0,0,0,0)", "rgba(243,233,216,0.79)"]} 
                              style={styles.linearGradient}>
-                        <Text style={styles.logo}>CoffeTime</Text>
-                        <Text style={styles.secLogo}>территория кофе</Text>
-                            <TouchableOpacity>
-                                <Image source = {require("../assets/pictures/user_borders.png")}
-                                       style = {styles.imageAvatar}
-                                />
-                            </TouchableOpacity>
-                            <TextInput
-                                style={styles.mailInput}
-                                placeholder = "Введите e-mail"
-                                onChangeText = {textHandlers.changeLoginHandler}
-                                value = {mailText}
-                                placeholderTextColor = "white"
-                            />
+                            <Text style={styles.logo}>CoffeTime</Text>
+                            <Text style={styles.secLogo}>территория кофе</Text>
+                                <View>
+                                    <TouchableOpacity onPress={() => {
+                                        refRBSheet.current.snapTo(0);
+                                    }}>
+                                        <Image source = {photo}
+                                               style = {styles.imageAvatar}
+                                        />
+                                    </TouchableOpacity>    
+                                </View>
 
-                            <Text style={styles.errText}>{mailErr}{emptyValueErr}</Text>
+                                <View>  
+                                    <View style={styles.mailInputView}> 
+                                        <TextInput 
+                                            style={styles.mailInput}
+                                            placeholder = "Введите e-mail"
+                                            onChangeText = {textHandlers.changeLoginHandler}
+                                            value = {mailText}
+                                            placeholderTextColor = "white"
+                                        />
+                                        <Icon
+                                            color="white"
+                                            name="user"
+                                            type="font-awesome"
+                                            size={25}
+                                        />
+                                    </View>
 
-                            <TextInput
-                                style={styles.pasInput}
-                                placeholder = "Введите пароль"
-                                onChangeText = {textHandlers.changePasswordHandler}
-                                value = {pasText}
-                                secureTextEntry
-                                placeholderTextColor = "white"
-                            />
+                                <Text style={styles.errText}>{mailErr}{emptyValueErr}</Text>
 
-                            <Text style={styles.errText}>{pasErr}{emptyValueErr}</Text>
+                                <View style={styles.pasInputView}>
+                                    <TextInput
+                                        style={styles.pasInput}
+                                        placeholder = "Введите пароль"
+                                        onChangeText = {textHandlers.changePasswordHandler}
+                                        value = {pasText}
+                                        secureTextEntry={passwordSecured}
+                                        placeholderTextColor = "white"
+                                    />
+                                    <TouchableOpacity 
+                                        onPress={passwordSecuredHandler}>
+                                        <Icon
+                                            color="white"
+                                            name="eye"
+                                            type="font-awesome-5"
+                                            size={25}
+                                        />
+                                    </TouchableOpacity>
+                                </View>
 
-                            <TextInput
-                                style={styles.repitePasInput}
-                                placeholder = "Повторите пароль"
-                                onChangeText = {textHandlers.changeRepitePasswordHandler}
-                                value = {repitePasText}
-                                secureTextEntry
-                                placeholderTextColor = "white"
-                            />
+                                <Text style={styles.errText}>{pasErr}{emptyValueErr}</Text>
+                                
+                                <View style = {styles.pasInputView}>
+                                    <TextInput
+                                        style={styles.pasInput}
+                                        placeholder = "Повторите пароль"
+                                        onChangeText = {textHandlers.changeRepitePasswordHandler}
+                                        value = {repitePasText}
+                                        secureTextEntry 
+                                        placeholderTextColor = "white"
+                                    />
+                                </View>
 
-                            <Text style={styles.errText}>{emptyValueErr}{repitePasErr}{serverErr}</Text>
+                                <Text style={styles.errText}>{emptyValueErr}{repitePasErr}{serverErr}</Text>
                 
-                            <TouchableOpacity
-                                onPress = {handleButtonPress}
-                                style={styles.confirmButton}>
-                                <Text style={styles.confirmTextButton}>Подтвердить</Text>
-                            </TouchableOpacity>
-                </LinearGradient>
-            </ImageBackground>  
-        </View>  
+                                <TouchableOpacity
+                                    onPress = {handleButtonPress}
+                                    style={styles.confirmButton}>
+                                        <Text style={styles.confirmTextButton}>Подтвердить</Text>
+                                </TouchableOpacity>
+                                
+                                <BottomSheet
+                                     ref = {refRBSheet}
+                                     renderContent={renderContent}
+                                     snapPoints={[260,0]}
+                                     initialSnap={1}
+                                     callbackNode={fall}
+                                     enabledContentGestureInteraction = {true}
+                                    />
+                                </View>
+                        </LinearGradient>
+                    </ImageBackground>
+                </View>  
+            </KeyboardAvoidingView>
+        </ScrollView>
     )
 };
 
 const styles=StyleSheet.create({
 
-    errText: {
-        color: "#b83030",
-        alignSelf: "center",
-        fontFamily: "SFUIText-Medium",
-        fontSize: 11.2,
-        backgroundColor: "rgba(153,143,113,0.47)",
-        width: 300,
-    },
     backImage: {
         height: 667,
         width: 375,
@@ -251,6 +366,7 @@ const styles=StyleSheet.create({
         color: "white",
         alignSelf: "center",
         marginTop: 70,
+        marginRight: 14,
         textShadowColor: 'rgba(0, 0, 0, 0.75)',
         textShadowOffset: {width: -1, height: 1},
         textShadowRadius: 10
@@ -263,55 +379,104 @@ const styles=StyleSheet.create({
         marginTop: -31,
         textShadowColor: 'rgba(0, 0, 0, 0.75)',
         textShadowOffset: {width: -1, height: 1},
-        textShadowRadius: 10
+        textShadowRadius: 10,
     },
     imageAvatar: {
         alignSelf: "center",
         marginTop: 30,
+        marginRight: 14,
+        height: 142,
+        width: 142,
+        borderRadius: 100,
+        borderColor: "white",
+        borderWidth: 3
+    },
+    bottomSheet: {
+        width: "100%",
+        height: "100%",
+        backgroundColor: "rgba(203,193,163,0.35)",
+        alignItems: "center",
+        paddingTop: 40,
+    },
+    backBottomImage: {
+        height: 275,
+        width: 365,
+    },
+    galleryPhotoButton: {
+        marginTop: 35,
+        alignSelf: "center",
+        backgroundColor: "#977c48",
+        borderRadius: 100,
+        width: 260,
+        height: 46
+    },
+    textGalleryButton: {
+        color: "white",
+        alignSelf: "center",
+        marginTop: 9,
+        fontSize: 19,
+        fontFamily: "SFUIText-Medium"
+    },
+    cameraPhotoButton: {
+        marginTop: 30,
+        alignSelf: "center",
+        backgroundColor: "#977c48",
+        borderRadius: 100,
+        width: 260,
+        height: 46,
+    },
+    textCameraButton: {
+        color: "#FFFFFF",
+        alignSelf: "center",
+        marginTop: 9,
+        fontSize: 19,
+        fontFamily: "SFUIText-Medium",
+    },
+    mailInputView: {
+        flexDirection: "row",
+        backgroundColor: "rgba(153,143,113,0.55)", 
+        paddingHorizontal: 10,
+        height: 44,
+        width: 300,
+        display: "flex",
+        alignItems: "center",
+        borderRadius: 8,
+        marginLeft: 30,
+        marginTop: 30
     },
     mailInput: {
-        marginTop: 30,
-        backgroundColor: "rgba(153,143,113,0.55)",
-        alignSelf: "center",
-        borderColor: "#ffffff", 
-        borderWidth: 0,
-        height: 37,
-        width: 300,
         fontSize: 16,
         color: "white",
-        fontFamily: "SFUIText-Medium"
+        fontFamily: "SFUIText-Medium",
+        flex: 1, 
+        paddingHorizontal: 12,
+    },
+    pasInputView: {
+        flexDirection: "row",
+        backgroundColor: "rgba(153,143,113,0.55)", 
+        paddingHorizontal: 10,
+        height: 44,
+        width: 300,
+        display: "flex",
+        alignItems: "center",
+        borderRadius: 8,
+        marginLeft: 30,
     },
     pasInput: {
-        marginTop: 10,
-        backgroundColor: "rgba(153,143,113,0.55)",
-        alignSelf: "center",
-        borderColor: "#ffffff", 
-        borderWidth: 0,
-        height: 37,
-        width: 300,
         fontSize: 16,
         color: "white",
-        fontFamily: "SFUIText-Medium"
-    },
-    repitePasInput: {
-        marginTop: 10,
-        backgroundColor: "rgba(153,143,113,0.55)",
-        alignSelf: "center",
-        borderColor: "#ffffff", 
-        borderWidth: 0,
-        height: 37,
-        width: 300,
-        fontSize: 16,
-        color: "white",
-        fontFamily: "SFUIText-Medium"
+        fontFamily: "SFUIText-Medium",
+        flex: 1, 
+        paddingHorizontal: 12,
     },
     confirmButton: {
         margin: 30,
-        alignSelf: "center",
+        marginLeft: 30,
         backgroundColor: "#99b372",
         borderRadius: 100,
         width: 300,
-        height: 52
+        height: 52,
+        marginBottom: 50
     },
     confirmTextButton: {
         color: "white",
@@ -319,5 +484,12 @@ const styles=StyleSheet.create({
         marginTop: 10,
         fontSize: 22,
         fontFamily: "SFUIText-Medium"
+    },
+    errText: {
+        color: "#b83030",
+        alignSelf: "center",
+        fontFamily: "SFUIText-Medium",
+        fontSize: 12,
+        width: 300,
     },
 });

@@ -5,6 +5,7 @@ import { createAuthConfig } from "../api/AuthUser";
 import {useDispatch} from "react-redux";
 import {saveSessionId} from "../redux/UserReduser";
 import LinearGradient from "react-native-linear-gradient";
+import { Icon } from "react-native-elements";
 
 
 
@@ -18,6 +19,8 @@ export const LoginScreen = (props: any) => {
     const [pas, setPas] = useState("");
     const [authErr, setAuthErr] = useState("");
     const [errEmptyValue, setErrEmptyValue] = useState("");
+
+    const [passwordSecured, setPasswordSecured] = useState(true);
 
     const mailChangeHandler = (text: string) => {
         setMail(text);
@@ -69,7 +72,10 @@ export const LoginScreen = (props: any) => {
         }
     };
 
-
+    const passwordSecuredHandler = (): void => {
+        setPasswordSecured(!passwordSecured);
+    };
+    
     const textButtonHandler = (): void => {
         navigation.navigate("RegistrationScreen");
     };
@@ -85,22 +91,44 @@ export const LoginScreen = (props: any) => {
                     style={styles.linearGradient}>
                         <Text style={styles.logo}>CoffeTime</Text>
                         <Text style={styles.secLogo}>территория кофе</Text>
-                        <TextInput 
-                            style={styles.textMailInput}
-                            onChangeText = {mailChangeHandler}
-                            value = {mail} 
-                            placeholder = {`Введите e-mail`}
-                            placeholderTextColor = "white"
-                        />
+
+                            <View style={styles.mailInputView}> 
+                                <TextInput 
+                                    style={styles.textMailInput}
+                                    placeholder = "Введите e-mail"
+                                    onChangeText = {mailChangeHandler}
+                                    value = {mail}
+                                    placeholderTextColor = "white"
+                                />
+                                <Icon
+                                    color="white"
+                                    name="user"
+                                    type="font-awesome"
+                                    size={25}
+                                />
+                            </View>
+
                             <Text style={styles.errText}>{errEmptyValue}</Text>
-                        <TextInput 
-                            style={styles.textPasInput}
-                            onChangeText = {pasChangeHandler}
-                            value = {pas}
-                            placeholder = {`Введите пароль`}
-                            placeholderTextColor = "white"
-                            secureTextEntry
-                        />
+
+                         <View style={styles.pasInputView}>
+                                    <TextInput
+                                        style={styles.textPasInput}
+                                        placeholder = "Введите пароль"
+                                        onChangeText = {pasChangeHandler}
+                                        value = {pas}
+                                        secureTextEntry={passwordSecured}
+                                        placeholderTextColor = "white"
+                                    />
+                                    <TouchableOpacity 
+                                        onPress={passwordSecuredHandler}>
+                                        <Icon
+                                            color="white"
+                                            name="eye"
+                                            type="font-awesome-5"
+                                            size={25}
+                                        />
+                                    </TouchableOpacity>
+                                </View>
                             <Text style={styles.errText}>{authErr}{errEmptyValue}</Text>
                             
                                 <TouchableOpacity
@@ -139,20 +167,13 @@ const styles=StyleSheet.create({
         height: 667,
         width: 375,
     },
-    errText: {
-        color: "#b83030",
-        alignSelf: "center",
-        fontFamily: "SFUIText-Medium",
-        fontSize: 11.2,
-        backgroundColor: "rgba(193,183,153,0.47)",
-        width: 300,
-    },
     logo: {
         fontFamily: "Lobster-Regular",
         fontSize: 62,
         color: "white",
         alignSelf: "center",
         marginTop: 80,
+        marginRight: 14,
         textShadowColor: 'rgba(0, 0, 0, 0.75)',
         textShadowOffset: {width: -1, height: 1},
         textShadowRadius: 10,
@@ -167,33 +188,46 @@ const styles=StyleSheet.create({
         textShadowOffset: {width: -1, height: 1},
         textShadowRadius: 10,
     },
-    textMailInput: {
-        marginTop: 80,
-        alignSelf: "center",
-        backgroundColor: "rgba(193,183,153,0.55)",
-        borderColor: "#ffffff", 
-        borderWidth: 0,
+    mailInputView: {
+        flexDirection: "row",
+        backgroundColor: "rgba(153,143,113,0.55)", 
+        paddingHorizontal: 10,
+        height: 44,
         width: 300,
-        height: 37,
+        display: "flex",
+        alignItems: "center",
+        borderRadius: 8,
+        marginLeft: 30,
+        marginTop: 76
+    },
+    textMailInput: {
         fontSize: 16,
         color: "white",
         fontFamily: "SFUIText-Medium",
+        flex: 1, 
+        paddingHorizontal: 12,
+    },
+    pasInputView: {
+        flexDirection: "row",
+        backgroundColor: "rgba(153,143,113,0.55)", 
+        paddingHorizontal: 10,
+        height: 44,
+        width: 300,
+        display: "flex",
+        alignItems: "center",
+        borderRadius: 8,
+        marginLeft: 30,
     },
     textPasInput: {
-        marginTop: 10,
-        backgroundColor: "rgba(193,183,153,0.55)",
-        alignSelf: "center",
-        borderColor: "#ffffff", 
-        borderWidth: 0,
-        height: 37,
-        width: 300,
         fontSize: 16,
         color: "white",
         fontFamily: "SFUIText-Medium",
+        flex: 1, 
+        paddingHorizontal: 12,
     },
     confirmButton: {
         margin: 18,
-        alignSelf: "center",
+        marginLeft: 30,
         backgroundColor: "#b5cc93",
         borderRadius: 100,
         width: 300,
@@ -208,7 +242,7 @@ const styles=StyleSheet.create({
     },
     regButton: {
         marginBottom: 25,
-        alignSelf: "center",
+        marginLeft: 30,
         backgroundColor: "#b5cc93",
         borderRadius: 100,
         width: 300,
@@ -227,7 +261,7 @@ const styles=StyleSheet.create({
     },
     buttonFB: {
         marginTop: 40,
-        alignSelf: "center",
+        marginLeft: 30,
         backgroundColor: "#3B5998",
         borderRadius: 100,
         width: 300,
@@ -245,5 +279,12 @@ const styles=StyleSheet.create({
         marginTop: 13,
         marginLeft: 30,
         alignSelf: "center",
-    }
+    },
+    errText: {
+        color: "#b83030",
+        alignSelf: "center",
+        fontFamily: "SFUIText-Medium",
+        fontSize: 12,
+        width: 300,
+    },
 });
