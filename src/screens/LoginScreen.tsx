@@ -6,6 +6,8 @@ import {useDispatch} from "react-redux";
 import {saveSessionId} from "../redux/UserReduser";
 import LinearGradient from "react-native-linear-gradient";
 import { Icon } from "react-native-elements";
+import { LoginManager } from "react-native-fbsdk";
+
 
 
 
@@ -80,6 +82,24 @@ export const LoginScreen = (props: any) => {
         navigation.navigate("RegistrationScreen");
     };
 
+    const FBLoginHandler = (): void => {
+        LoginManager.logInWithPermissions(["public_profile"]).then(
+            function (result) {
+              if (result.isCancelled) {
+                console.log("Login cancelled");
+              } else {
+                console.log("Login success with permissions");
+                navigation.navigate("HomeScreen");
+              }
+            },
+            function (error) {
+              console.log("Login fail with error: " + error);
+            }
+        );
+    };
+       
+    
+
     return (
 
         <View>
@@ -144,7 +164,8 @@ export const LoginScreen = (props: any) => {
                                 </TouchableOpacity>
 
                                 <TouchableOpacity
-                                    style = {styles.buttonFB}>
+                                    style = {styles.buttonFB}
+                                    onPress={FBLoginHandler}>
                                         <View style = {styles.FBAll}>
                                             <Image source = {require("../assets/pictures/icon_facebook.png")}
                                                    style = {styles.imageFB}/> 
