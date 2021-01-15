@@ -10,7 +10,7 @@ interface initialState {
     imageObj: object,
 }
 
-const initialState = {
+export const initialState = {
     login: "",
     password: "",
     sessionId: "",

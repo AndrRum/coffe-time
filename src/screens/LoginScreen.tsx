@@ -3,7 +3,7 @@ import {TextInput, View, StyleSheet, TouchableOpacity, Text, ImageBackground, Im
 import { execRequest } from "../api/ExecuteRequest";
 import { createAuthConfig } from "../api/AuthUser";
 import {useDispatch} from "react-redux";
-import {saveSessionId} from "../redux/UserReduser";
+import {saveSessionId, saveLogPas} from "../redux/UserReduser";
 import LinearGradient from "react-native-linear-gradient";
 import { Icon } from "react-native-elements";
 import { LoginManager } from "react-native-fbsdk";
@@ -49,6 +49,7 @@ export const LoginScreen = (props: any) => {
     const onLoginSuccess = (result: any): void => {
         console.log(result);
         dispatch(saveSessionId(sessionId));
+        dispatch(saveLogPas(mail, pas))
         navigation.navigate("HomeScreen");
         clearFieldsHandler.rightData();
     };
