@@ -1,69 +1,52 @@
-const SAVE_SESSIONID = "SAVE_SESSIONID";
-const SAVE_LOG_PAS = "SAVE_LOG_PAS";
+const SAVE_USER = "SAVE_USER";
 const SAVE_IMAGE = "SAVE_IMAGE_OR_PHOTO";
 
 
-interface initialState {
+export interface IReduxState {
     login: string,
     password: string,
     sessionId: string,
-    imageObj: object,
+    imagePath: string,
 }
 
-export const initialState = {
+const initialState:IReduxState = {
     login: "",
     password: "",
     sessionId: "",
-    imageObj: {}
+    imagePath: "",
 };
 
-export const saveSessionId = (sessionId: string) => {
-    return {
-        type: SAVE_SESSIONID,
-        payload: sessionId
-    };
-};
-
-export const saveLogPas = (login: string, password: string) => {
-    return {
-        type: SAVE_LOG_PAS,
-        payload: login, password
-    };
-};
-
-export const saveImage = (imageObj: object) => {
-    return {
-        type: SAVE_IMAGE,
-        payload: imageObj
-    }
+interface IAction {
+    type: string,
+    payload: any
 }
 
-export const UserReduser = (state = initialState, action: any) => {
+export const saveUser = (login: string, password: string, sessionId: string): IAction => {
+    return {
+        type: SAVE_USER,
+        payload: { login, password, sessionId }
+    };
+};
+
+
+export const saveImage = (imagePath: string) => {
+    return {
+        type: SAVE_IMAGE,
+        payload: imagePath
+    };
+};
+
+export const UserReduser = (state = initialState, action: IAction): IReduxState => {
     switch (action.type) {
 
-        case SAVE_SESSIONID: {
-            const newValue = action.payload
-            return {
-
-                sessionId: newValue,
-            }
+        case SAVE_USER: {
+            const {login, password, sessionId} = action.payload;
+            return {...state, login, password, sessionId };
          }
 
-        case SAVE_LOG_PAS: {
-            
-            const newValue = action.payload
-            return {
-                ...state,
-                login: newValue,
-                password: newValue,
-            }
-        }
-
         case SAVE_IMAGE: {
-            const newValue = action.payload
-            return {
-                imageObj: newValue
-            }
+            const imagePath =  action.payload;
+            return {...state, imagePath};
         }
 
         default: return state 
