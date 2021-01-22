@@ -12,7 +12,7 @@ import {Text,
 import { execRequest } from "../api/ExecuteRequest";
 import { createRegisterConfig } from "../api/AuthUser";
 import {useDispatch} from "react-redux";
-import {saveLogPas,saveSessionId,saveImage} from "../redux/UserReduser";
+import {saveUser, saveImage} from "../redux/UserReduser";
 import LinearGradient from "react-native-linear-gradient";
 import BottomSheet from "reanimated-bottom-sheet";
 import ImagePicker from "react-native-image-crop-picker";
@@ -24,14 +24,20 @@ import { Icon } from "react-native-elements";
 export const RegistrationScreen = (props: any) => {
 
     const navigation = props.navigation;
-
     const dispatch = useDispatch();
-
-
     const refRBSheet: any = useRef();
     const fall = new Animated.Value(1);
 
-    const [photo,setPhoto] = useState(require("../assets/pictures/user_borders.png"));
+    const [photo,setPhoto] = useState(require ("../assets/pictures/user.png"));
+    const [mailText,setMailText] = useState ("");
+    const [pasText,setPasText] = useState ("");
+    const [repitePasText, setRepitePasText] = useState ("");
+    const [mailErr, setMailErr] = useState("");
+    const [pasErr, setPasErr] = useState("");
+    const [repitePasErr, setRepitePasErr] = useState("");
+    const [serverErr,setServerErr] = useState("");
+    const [emptyValueErr,setEmptyValueErr] = useState("");
+    const [passwordSecured, setPasswordSecured] = useState(true);
 
     const e: any = () => { 
         Alert.alert("Не удалось загрузить фото");
@@ -47,8 +53,8 @@ export const RegistrationScreen = (props: any) => {
             const imageObj = {
                 uri: photo.path
             };
+            dispatch(saveImage(photo.path));
             setPhoto(imageObj);
-            dispatch(saveImage(imageObj));
             refRBSheet.current.snapTo(1);
           }).catch(e)
     };
@@ -64,7 +70,7 @@ export const RegistrationScreen = (props: any) => {
                 uri: photo.path
             };
             setPhoto(imageObj);
-            dispatch(saveImage(imageObj));
+            dispatch(saveImage(photo.path));
             refRBSheet.current.snapTo(1);
           }).catch(e)
     };
@@ -87,19 +93,6 @@ export const RegistrationScreen = (props: any) => {
             </View>
         </ImageBackground>
     );
-
-    const [mailText,setMailText] = useState ("");
-    const [pasText,setPasText] = useState ("");
-    const [repitePasText, setRepitePasText] = useState ("");
-
-
-    const [mailErr, setMailErr] = useState("");
-    const [pasErr, setPasErr] = useState("");
-    const [repitePasErr, setRepitePasErr] = useState("");
-    const [serverErr,setServerErr] = useState("");
-    const [emptyValueErr,setEmptyValueErr] = useState("");
-
-    const [passwordSecured, setPasswordSecured] = useState(true);
 
     const textHandlers = {
         changeLoginHandler: (text:string) => {setMailText(text.trim())},
@@ -190,13 +183,10 @@ export const RegistrationScreen = (props: any) => {
     const passwordSecuredHandler = (): void => {
         setPasswordSecured(!passwordSecured);
     };
-    
-    let sessionId: string = "";
 
     const onRegisterSuccess = (result: any): void => {
         console.log(result);
-        dispatch(saveSessionId(sessionId));
-        dispatch(saveLogPas(mailText, pasText));
+        dispatch(saveUser(mailText, pasText, result.data));
         navigation.navigate("HomeScreen");
     };
 

@@ -3,31 +3,24 @@ import {TextInput, View, StyleSheet, TouchableOpacity, Text, ImageBackground, Im
 import { execRequest } from "../api/ExecuteRequest";
 import { createAuthConfig } from "../api/AuthUser";
 import {useDispatch} from "react-redux";
-import {saveSessionId, saveLogPas} from "../redux/UserReduser";
+import {saveUser} from "../redux/UserReduser";
 import LinearGradient from "react-native-linear-gradient";
 import { Icon } from "react-native-elements";
 import { LoginManager } from "react-native-fbsdk";
-
-
-
 
 
 export const LoginScreen = (props: any) => {
 
     const navigation = props.navigation; 
     const dispatch = useDispatch();
-
     const [mail, setMail] = useState("");
     const [pas, setPas] = useState("");
     const [authErr, setAuthErr] = useState("");
     const [errEmptyValue, setErrEmptyValue] = useState("");
-
     const [passwordSecured, setPasswordSecured] = useState(true);
-
     const mailChangeHandler = (text: string) => {
         setMail(text);
     };
-
     const pasChangeHandler = (text: string) => {
         setPas(text);
     };
@@ -43,16 +36,16 @@ export const LoginScreen = (props: any) => {
         onlyAuthErr: () => {setMail(""), setPas(""), setErrEmptyValue("")},
         onlyErrEmptyValue: () => {setMail(""), setPas(""), setAuthErr("")},
     };
-    
-    const sessionId = "";
+
 
     const onLoginSuccess = (result: any): void => {
         console.log(result);
-        dispatch(saveSessionId(sessionId));
-        dispatch(saveLogPas(mail, pas))
+        dispatch(saveUser(mail, pas, result.data));
+        console.log(`Session: ${result.data}`);
         navigation.navigate("HomeScreen");
         clearFieldsHandler.rightData();
     };
+
 
     const onLoginFailure = (reason: any): void => {
         console.log(reason);

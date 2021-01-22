@@ -6,7 +6,6 @@ import LottieView from "lottie-react-native";
 export const SplashScreen = (props: any) => {
     const navigation = props.navigation; 
     const isLoggedIn = useSelector((state: any) => state.password);
-    console.log (isLoggedIn)
     useEffect (()=>{
         setTimeout(()=>{
             navigateToLoginOrHomeScreen();
@@ -14,22 +13,15 @@ export const SplashScreen = (props: any) => {
     }, 
     [navigation]);
 
-
     const navigateToLoginOrHomeScreen = () => {
-        if (isLoggedIn!==null) {
-            console.log ("Ok")
-            navigation.reset ({
-                index: 0,
-                routes: [{name: "HomeScreen"}]
-            })
-        }
+        if (isLoggedIn!=="") {
+            console.log ("Logged")
+            navigation.navigate("LoginScreen")
+            }
         else {
-            console.log ("No")
-            navigation.reset({
-                index: 0,
-                routes: [{name: "LoginScreen"}]
-            })
-        };
+            console.log ("NoLogged")
+            navigation.navigate("LoginScreen")
+            }
     };
 
     return (
