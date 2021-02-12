@@ -1,10 +1,10 @@
 import React from "react";
 import {createStackNavigator} from "@react-navigation/stack";
-import {HeaderBackButton} from "@react-navigation/stack";
-import {LoginScreen} from "../screens/LoginScreen";
-import { RegistrationScreen } from "../screens/RegistrationScreen";
-import {HomeScreen} from "../screens/HomeScreen";
-import {SplashScreen} from "../screens/SplashScreen";
+import {LoginScreen} from "../screens/LoginScreen/LoginScreen";
+import { RegistrationScreen } from "../screens/RegistrationScreen/RegistrationScreen";
+import {HomeScreen} from "../screens/HomeScreen/HomeScreen";
+import {SplashScreen} from "../screens/SplashScreen/SplashScreen";
+import {Header} from  "../components/Header"
 
 
 type RootStackParamList = {
@@ -17,16 +17,25 @@ type RootStackParamList = {
 const Stack = createStackNavigator<RootStackParamList>();
 
 
- export const NavigationStack = (props: any) => {
+ export const NavigationStack = () => {
 
      return (
-        <Stack.Navigator
-        >
+        <Stack.Navigator>
                     <Stack.Screen
                         name= "SplashScreen"
                         component= {SplashScreen}
                         options = {{
                             headerShown: false
+                        }}
+                    />
+                    <Stack.Screen
+                        name= "RegistrationScreen"
+                        component={RegistrationScreen}
+                        options = {{
+                            headerTitle: () => <Header/>,
+                            headerLeft: () => {
+                                return null;
+                              },
                         }}
                     />
                     <Stack.Screen
@@ -36,27 +45,14 @@ const Stack = createStackNavigator<RootStackParamList>();
                             headerShown: false
                         }}
                     />
-                    <Stack.Screen
-                        name= "RegistrationScreen"
-                        component={RegistrationScreen}
-                        options = {{
-                            headerShown: false
-                        }}
-                    />
-                    <Stack.Screen
+                     <Stack.Screen
                         name= "HomeScreen"
                         component= {HomeScreen}
                         options={{
-                            headerLeft: (props) => (
-                                <HeaderBackButton
-                                  {...props}
-                                  onPress={() => {
-                                    // navigation.navigate("SplashScreen");
-                                  }}
-                                />
-                              ),
-                            title: "CoffeTime",
-                            headerTitleAlign: "center",
+                            headerTitle: () => <Header/>,
+                            headerLeft: () => {
+                                return null;
+                              },
                         }}
                     />
         </Stack.Navigator>
