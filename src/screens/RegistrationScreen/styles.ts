@@ -1,0 +1,146 @@
+import {StyleSheet} from "react-native";
+import {fonts} from "../../styles/constants";
+import {colors} from "../../styles/constants";
+
+export default StyleSheet.create({
+    backImage: {
+        height: 585,
+        width: "100%",
+    },
+    linearGradient: {
+        height: 667,
+        width: 375,
+    },
+    logo: {
+        fontFamily: fonts.LOBSTER_REGULAR,
+        fontSize: 62,
+        color: colors.WHITE,
+        alignSelf: "center",
+        marginTop: 20,
+        marginRight: 14,
+        textShadowColor: colors.BLACK_SHADOW,
+        textShadowOffset: {width: -1, height: 1},
+        textShadowRadius: 10
+    },
+    secLogo: {
+        fontFamily: fonts.SFUI_LIGHT,
+        fontSize: 16,
+        color: "white",
+        marginLeft: 157,
+        marginTop: -31,
+        textShadowColor: colors.BLACK_SHADOW,
+        textShadowOffset: {width: -1, height: 1},
+        textShadowRadius: 10,
+    },
+    imageAvatar: {
+        alignSelf: "center",
+        marginTop: 30,
+        marginRight: 14,
+        height: 142,
+        width: 142,
+        borderRadius: 100,
+        borderColor: colors.WHITE,
+        borderWidth: 3,
+    },
+    bottomSheet: {
+        width: "100%",
+        height: "100%",
+        backgroundColor: colors.CHINO,
+        alignItems: "center",
+        paddingTop: 40,
+    },
+    backBottomImage: {
+        height: 275,
+        width: 365,
+    },
+    galleryPhotoButton: {
+        marginTop: 35,
+        alignSelf: "center",
+        backgroundColor: colors.CAPE_PALLISER,
+        borderRadius: 100,
+        width: 260,
+        height: 46
+    },
+    textGalleryButton: {
+        color: colors.WHITE,
+        alignSelf: "center",
+        marginTop: 9,
+        fontSize: 19,
+        fontFamily: fonts.SFUI_MEDIUM,
+    },
+    cameraPhotoButton: {
+        marginTop: 30,
+        alignSelf: "center",
+        backgroundColor: colors.CAPE_PALLISER,
+        borderRadius: 100,
+        width: 260,
+        height: 46,
+    },
+    textCameraButton: {
+        color: colors.WHITE,
+        alignSelf: "center",
+        marginTop: 9,
+        fontSize: 19,
+        fontFamily: fonts.SFUI_MEDIUM,
+    },
+    mailInputView: {
+        flexDirection: "row",
+        backgroundColor: colors.TRANSPARENT_BROWN, 
+        paddingHorizontal: 10,
+        height: 44,
+        width: 300,
+        display: "flex",
+        alignItems: "center",
+        borderRadius: 8,
+        marginLeft: 30,
+        marginTop: 30
+    },
+    mailInput: {
+        fontSize: 16,
+        color: colors.WHITE,
+        fontFamily: fonts.SFUI_MEDIUM,
+        flex: 1, 
+        paddingHorizontal: 12,
+    },
+    pasInputView: {
+        flexDirection: "row",
+        backgroundColor: colors.TRANSPARENT_BROWN, 
+        paddingHorizontal: 10,
+        height: 44,
+        width: 300,
+        display: "flex",
+        alignItems: "center",
+        borderRadius: 8,
+        marginLeft: 30,
+    },
+    pasInput: {
+        fontSize: 16,
+        color: colors.WHITE,
+        fontFamily: fonts.SFUI_MEDIUM,
+        flex: 1, 
+        paddingHorizontal: 12,
+    },
+    confirmButton: {
+        margin: 30,
+        marginLeft: 30,
+        backgroundColor: colors.OLIVINE,
+        borderRadius: 100,
+        width: 300,
+        height: 52,
+        marginBottom: 50
+    },
+    confirmTextButton: {
+        color: colors.WHITE,
+        alignSelf: "center",
+        marginTop: 10,
+        fontSize: 22,
+        fontFamily: fonts.SFUI_MEDIUM,
+    },
+    errText: {
+        color: colors.WELL_READ,
+        alignSelf: "center",
+        fontFamily: fonts.SFUI_MEDIUM,
+        fontSize: 12,
+        width: 300,
+    },
+});
