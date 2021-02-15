@@ -1,41 +1,41 @@
-import { Method } from "axios"
+import {Method} from "axios";
 
 export interface IRequestConfig {
-    url: string,
-    method: Method,
-    baseURL: string,
-    data: any,
-    headers?: object
+  url: string;
+  method: Method;
+  baseURL: string;
+  data: any;
+  headers?: object;
 }
 
 interface IAuthData {
-    email: string,
-    password: string,
+  email: string;
+  password: string;
 }
 
 const routes = {
-    register: '/api/User/Register',
-    auth: '/api/User/Authorization',
-    test: '/users'
-}
+  register: "/api/User/Register",
+  auth: "/api/User/Authorization",
+  test: "/users",
+};
 
-const BASE_URL = 'http://ci2.dextechnology.com:8000'        //TODO: import later
+const BASE_URL = "http://ci2.dextechnology.com:8000"; //TODO: import later
 
 export const createRegisterConfig = (data: IAuthData): IRequestConfig => ({
-    url: routes.register,
-    method: "post",
-    baseURL: BASE_URL,
-    data: data,
-    headers: { "Content-Type": "application/json" }
-})
+  url: routes.register,
+  method: "post",
+  baseURL: BASE_URL,
+  data: data,
+  headers: {"Content-Type": "application/json"},
+});
 
 export const createAuthConfig = (data: IAuthData): IRequestConfig => ({
-    url: routes.auth,
-    method: "post",
-    baseURL: BASE_URL,
-    data: data,
-    headers: { "Content-Type": "application/json" }
-})
+  url: routes.auth,
+  method: "post",
+  baseURL: BASE_URL,
+  data: data,
+  headers: {"Content-Type": "application/json"},
+});
 
 // class BaseRequest {
 //     protected static handleError = (e: any) => {
@@ -70,7 +70,7 @@ export const createAuthConfig = (data: IAuthData): IRequestConfig => ({
 //     export class UserRequest implements IUserRequest {
 //         email?: string | undefined;
 //         password: string;
-    
+
 //         constructor(data?: IUserRequest) {
 //             if (data) {
 //                 for (let property in data) {
@@ -79,20 +79,20 @@ export const createAuthConfig = (data: IAuthData): IRequestConfig => ({
 //                 }
 //             }
 //         }
-    
+
 //         static fromJS(data: any): UserRequest {
 //             let result = new UserRequest();
 //             result.init(data);
 //             return result;
 //         }
-    
+
 //         init(data?: any) {
 //             if (data) {
 //                 this.email = data["email"];
 //                 this.password = data["password"];
 //             }
 //         }
-    
+
 //         toJSON(data?: any) {
 //             data = typeof data === 'object' ? data : {};
 //             data["email"] = this.email;
@@ -100,13 +100,11 @@ export const createAuthConfig = (data: IAuthData): IRequestConfig => ({
 //             return data;
 //         }
 //     }
-    
+
 //     export interface IUserRequest {
 //         email?: string | undefined;
 //         password: string;
 //     }
-
-
 
 // const userRequest = new UserClientRequest();
 
