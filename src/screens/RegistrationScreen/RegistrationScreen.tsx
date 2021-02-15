@@ -137,29 +137,35 @@ export const RegistrationScreen = (props: any) => {
   };
   const clearErrorsFieldsHandler: typeErrFields = {
     rightData: () => {
-      setMailErr(""),
-        setPasErr(""),
-        setRepitePasErr(""),
-        setServerErr(""),
+      setMailErr("");
+        setPasErr("");
+        setRepitePasErr("");
+        setServerErr("");
         setEmptyValueErr("");
     },
     onlyMailErr: () => {
-      setPasErr(""),
-        setRepitePasErr(""),
-        setServerErr(""),
+      setPasErr("");
+        setRepitePasErr("");
+        setServerErr("");
         setEmptyValueErr("");
     },
     onlyPasErr: () => {
-      setMailErr(""),
-        setRepitePasErr(""),
-        setServerErr(""),
+      setMailErr("");
+        setRepitePasErr("");
+        setServerErr("");
         setEmptyValueErr("");
     },
     onlyRepitePasErr: () => {
-      setMailErr(""), setPasErr(""), setServerErr(""), setEmptyValueErr("");
+      setMailErr(""); 
+        setPasErr(""); 
+        setServerErr(""); 
+        setEmptyValueErr("");
     },
     onlyEmptyValueErr: () => {
-      setMailErr(""), setPasErr(""), setRepitePasErr(""), setServerErr("");
+      setMailErr(""); 
+        setPasErr(""); 
+        setRepitePasErr(""); 
+        setServerErr("");
     },
   };
   const mailString: string = mailText;
@@ -213,7 +219,7 @@ export const RegistrationScreen = (props: any) => {
   const onRegisterSuccess = (result: any): void => {
     console.log(result);
     dispatch(saveUser(mailText, pasText, result.data));
-    navigation.navigate("HomeScreen");
+    navigation.replace("HomeScreen");
   };
   const onRegisterFailure = (reason: any): void => {
     console.log(reason);

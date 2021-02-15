@@ -3,20 +3,21 @@ import {View, Text, Image} from "react-native";
 import {TouchableOpacity} from "react-native-gesture-handler";
 import {useNavigation} from "@react-navigation/native";
 import styles from "./styles";
+import {images} from "../styles/images";
 
 export const Header = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
   return (
     <View style={styles.container}>
       <View>
         <TouchableOpacity
           onPress={() => {
-            navigation.goBack();
+            navigation.replace("LoginScreen");
           }}
           style={styles.backButton}>
           <Image
             style={styles.imageButton}
-            source={require("../assets/pictures/icon_back_click.png")}
+            source={images.ICON_BACK_CLICK}
           />
         </TouchableOpacity>
       </View>

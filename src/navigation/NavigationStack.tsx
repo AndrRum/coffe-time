@@ -26,16 +26,6 @@ export const NavigationStack = () => {
         }}
       />
       <Stack.Screen
-        name="RegistrationScreen"
-        component={RegistrationScreen}
-        options={{
-          headerTitle: () => <Header />,
-          headerLeft: () => {
-            return null;
-          },
-        }}
-      />
-      <Stack.Screen
         name="LoginScreen"
         component={LoginScreen}
         options={{
@@ -45,6 +35,16 @@ export const NavigationStack = () => {
       <Stack.Screen
         name="HomeScreen"
         component={HomeScreen}
+        options={{
+          headerTitle: () => <Header />,
+          headerLeft: () => {
+            return null;
+          },
+        }}
+      />
+      <Stack.Screen
+        name="RegistrationScreen"
+        component={RegistrationScreen}
         options={{
           headerTitle: () => <Header />,
           headerLeft: () => {

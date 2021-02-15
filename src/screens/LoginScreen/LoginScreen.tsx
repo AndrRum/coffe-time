@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from "react";
+import React, {useState} from "react";
 import {
   TextInput,
   View,
@@ -7,31 +7,20 @@ import {
   ImageBackground,
   Image,
 } from "react-native";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import LinearGradient from "react-native-linear-gradient";
 import {Icon} from "react-native-elements";
 import {LoginManager} from "react-native-fbsdk";
 import {saveUser} from "../../redux/UserReduser";
 import {execRequest} from "../../api/ExecuteRequest";
 import {createAuthConfig} from "../../api/AuthUser";
-import {IReduxState} from "../../redux/UserReduser";
 import styles from "./styles";
 import {images} from "../../styles/images";
+
 
 export const LoginScreen = (props: any) => {
   const navigation = props.navigation;
   const dispatch = useDispatch();
-  const isMounted = useRef(true);
-  const isLoggedIn = useSelector((state: IReduxState) => state.login);
-  console.log(isLoggedIn);
-  useEffect(() => {
-    if (isLoggedIn != "") {
-      navigation.navigate("HomeScreen");
-    }
-    return () => {
-      isMounted.current = false;
-    };
-  }, []);
   const [mail, setMail] = useState("");
   const [pas, setPas] = useState("");
   const [authErr, setAuthErr] = useState("");
@@ -50,21 +39,20 @@ export const LoginScreen = (props: any) => {
   };
   const clearFieldsHandler: typeErrFields = {
     rightData: () => {
-      setMail(""), setPas(""), setAuthErr(""), setErrEmptyValue("");
+      setMail(""); setPas(""); setAuthErr(""); setErrEmptyValue("");
     },
     onlyAuthErr: () => {
-      setMail(""), setPas(""), setErrEmptyValue("");
+      setMail(""); setPas(""); setErrEmptyValue("");
     },
     onlyErrEmptyValue: () => {
-      setMail(""), setPas(""), setAuthErr("");
+      setMail(""); setPas(""); setAuthErr("");
     },
   };
   const onLoginSuccess = (result: any): void => {
-    isMounted.current;
     console.log(result);
     dispatch(saveUser(mail, pas, result.data));
     console.log(`Session: ${result.data}`);
-    navigation.navigate("HomeScreen");
+    navigation.replace("HomeScreen");
     clearFieldsHandler.rightData();
   };
   const onLoginFailure = (reason: any): void => {
@@ -93,10 +81,10 @@ export const LoginScreen = (props: any) => {
     setPasswordSecured(!passwordSecured);
   };
   const textButtonHandler = (): void => {
-    navigation.push("RegistrationScreen");
+    navigation.replace("RegistrationScreen");
   };
   const FBLoginSuccess = (result: any): void => {
-    navigation.navigate("HomeScreen");
+    navigation.replace("HomeScreen");
   };
   const err = () => {
     console.log("Login fail");
