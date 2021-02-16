@@ -8,8 +8,8 @@ export default StyleSheet.create({
     width: "100%",
   },
   linearGradient: {
-    height: 667,
-    width: 375,
+    height: "100%",
+    width: "100%",
   },
   logo: {
     fontFamily: fonts.LOBSTER_REGULAR,
@@ -17,7 +17,6 @@ export default StyleSheet.create({
     color: colors.WHITE,
     alignSelf: "center",
     marginTop: 20,
-    marginRight: 14,
     textShadowColor: colors.BLACK_SHADOW,
     textShadowOffset: {width: -1, height: 1},
     textShadowRadius: 10,
