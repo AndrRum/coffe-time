@@ -5,16 +5,16 @@ import LottieView from "lottie-react-native";
 import styles from "./styles";
 import {images} from "../../styles/images";
 import {IReduxState} from "../../redux/UserReduser";
+import {splashProps} from "../../navigation/NavigationStack";
 
-export const SplashScreen = (props: any) => {
+export const SplashScreen = (props: splashProps) => {
   const navigation = props.navigation;
   const isLoggedIn = useSelector((state: IReduxState) => state.login);
   useEffect(() => {
     setTimeout(() => {
       if (isLoggedIn != "") {
         navigation.replace("HomeScreen");
-      }
-      else {
+      } else {
         navigation.replace("LoginScreen");
       }
     }, 3000);

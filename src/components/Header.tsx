@@ -15,10 +15,7 @@ export const Header = () => {
             navigation.replace("LoginScreen");
           }}
           style={styles.backButton}>
-          <Image
-            style={styles.imageButton}
-            source={images.ICON_BACK_CLICK}
-          />
+          <Image style={styles.imageButton} source={images.ICON_BACK_CLICK} />
         </TouchableOpacity>
       </View>
       <View style={styles.viewHeaderText}>

@@ -1,4 +1,4 @@
-import React, {useState, useRef} from "react";
+import React, {useState, useRef, MutableRefObject} from "react";
 import {
   Text,
   View,
@@ -21,11 +21,15 @@ import {createRegisterConfig} from "../../api/AuthUser";
 import {saveUser, saveImage} from "../../redux/UserReduser";
 import styles from "./styles";
 import {images} from "../../styles/images";
+import {regProps} from "../../navigation/NavigationStack";
+import BottomSheetBehavior from "reanimated-bottom-sheet";
 
-export const RegistrationScreen = (props: any) => {
+export const RegistrationScreen = (props: regProps) => {
   const navigation = props.navigation;
   const dispatch = useDispatch();
-  const refRBSheet: any = useRef();
+  const refRBSheet = useRef<
+    MutableRefObject<BottomSheetBehavior> | undefined | any
+  >();
   const fall = new Animated.Value(1);
   const [photo, setPhoto] = useState(images.USER);
   const [mailText, setMailText] = useState("");
@@ -38,7 +42,7 @@ export const RegistrationScreen = (props: any) => {
   const [emptyValueErr, setEmptyValueErr] = useState("");
   const [passwordSecured, setPasswordSecured] = useState(true);
 
-  const e: any = () => {
+  const e = (): void => {
     Alert.alert("Не удалось загрузить фото");
   };
   const takePhotoFromGallery = () => {
@@ -138,34 +142,34 @@ export const RegistrationScreen = (props: any) => {
   const clearErrorsFieldsHandler: typeErrFields = {
     rightData: () => {
       setMailErr("");
-        setPasErr("");
-        setRepitePasErr("");
-        setServerErr("");
-        setEmptyValueErr("");
+      setPasErr("");
+      setRepitePasErr("");
+      setServerErr("");
+      setEmptyValueErr("");
     },
     onlyMailErr: () => {
       setPasErr("");
-        setRepitePasErr("");
-        setServerErr("");
-        setEmptyValueErr("");
+      setRepitePasErr("");
+      setServerErr("");
+      setEmptyValueErr("");
     },
     onlyPasErr: () => {
       setMailErr("");
-        setRepitePasErr("");
-        setServerErr("");
-        setEmptyValueErr("");
+      setRepitePasErr("");
+      setServerErr("");
+      setEmptyValueErr("");
     },
     onlyRepitePasErr: () => {
-      setMailErr(""); 
-        setPasErr(""); 
-        setServerErr(""); 
-        setEmptyValueErr("");
+      setMailErr("");
+      setPasErr("");
+      setServerErr("");
+      setEmptyValueErr("");
     },
     onlyEmptyValueErr: () => {
-      setMailErr(""); 
-        setPasErr(""); 
-        setRepitePasErr(""); 
-        setServerErr("");
+      setMailErr("");
+      setPasErr("");
+      setRepitePasErr("");
+      setServerErr("");
     },
   };
   const mailString: string = mailText;

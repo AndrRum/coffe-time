@@ -1,5 +1,6 @@
 import React from "react";
 import {createStackNavigator} from "@react-navigation/stack";
+import {StackScreenProps} from "@react-navigation/stack";
 import {LoginScreen} from "../screens/LoginScreen/LoginScreen";
 import {RegistrationScreen} from "../screens/RegistrationScreen/RegistrationScreen";
 import {HomeScreen} from "../screens/HomeScreen/HomeScreen";
@@ -12,6 +13,13 @@ type RootStackParamList = {
   RegistrationScreen: undefined;
   HomeScreen: undefined;
 };
+
+export type splashProps = StackScreenProps<RootStackParamList, "SplashScreen">;
+export type loginProps = StackScreenProps<RootStackParamList, "LoginScreen">;
+export type regProps = StackScreenProps<
+  RootStackParamList,
+  "RegistrationScreen"
+>;
 
 const Stack = createStackNavigator<RootStackParamList>();
 

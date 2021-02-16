@@ -16,9 +16,9 @@ import {execRequest} from "../../api/ExecuteRequest";
 import {createAuthConfig} from "../../api/AuthUser";
 import styles from "./styles";
 import {images} from "../../styles/images";
+import {loginProps} from "../../navigation/NavigationStack";
 
-
-export const LoginScreen = (props: any) => {
+export const LoginScreen = (props: loginProps) => {
   const navigation = props.navigation;
   const dispatch = useDispatch();
   const [mail, setMail] = useState("");
@@ -39,13 +39,20 @@ export const LoginScreen = (props: any) => {
   };
   const clearFieldsHandler: typeErrFields = {
     rightData: () => {
-      setMail(""); setPas(""); setAuthErr(""); setErrEmptyValue("");
+      setMail("");
+      setPas("");
+      setAuthErr("");
+      setErrEmptyValue("");
     },
     onlyAuthErr: () => {
-      setMail(""); setPas(""); setErrEmptyValue("");
+      setMail("");
+      setPas("");
+      setErrEmptyValue("");
     },
     onlyErrEmptyValue: () => {
-      setMail(""); setPas(""); setAuthErr("");
+      setMail("");
+      setPas("");
+      setAuthErr("");
     },
   };
   const onLoginSuccess = (result: any): void => {
@@ -83,7 +90,7 @@ export const LoginScreen = (props: any) => {
   const textButtonHandler = (): void => {
     navigation.replace("RegistrationScreen");
   };
-  const FBLoginSuccess = (result: any): void => {
+  const FBLoginSuccess = (): void => {
     navigation.replace("HomeScreen");
   };
   const err = () => {
