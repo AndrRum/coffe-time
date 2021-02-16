@@ -17,6 +17,7 @@ import {createAuthConfig} from "../../api/AuthUser";
 import styles from "./styles";
 import {images} from "../../styles/images";
 import {loginProps} from "../../navigation/NavigationStack";
+import {IRequestConfig} from "../../api/AuthUser";
 
 export const LoginScreen = (props: loginProps) => {
   const navigation = props.navigation;
@@ -55,19 +56,19 @@ export const LoginScreen = (props: loginProps) => {
       setAuthErr("");
     },
   };
-  const onLoginSuccess = (result: any): void => {
+  const onLoginSuccess = (result: IRequestConfig): void => {
     console.log(result);
     dispatch(saveUser(mail, pas, result.data));
     console.log(`Session: ${result.data}`);
     navigation.replace("HomeScreen");
     clearFieldsHandler.rightData();
   };
-  const onLoginFailure = (reason: any): void => {
+  const onLoginFailure = (reason: IRequestConfig): void => {
     console.log(reason);
     setAuthErr("  Логин и/или пароль не совпадают");
     clearFieldsHandler.onlyAuthErr();
   };
-  const emptyValue = mail === "" || pas === "";
+  const emptyValue = mail == "" || pas == "";
 
   const handleNavigate = (): void => {
     if (!emptyValue)
@@ -93,7 +94,7 @@ export const LoginScreen = (props: loginProps) => {
   const FBLoginSuccess = (): void => {
     navigation.replace("HomeScreen");
   };
-  const err = () => {
+  const err = (): void => {
     console.log("Login fail");
   };
   const FBLoginHandler = (): void => {

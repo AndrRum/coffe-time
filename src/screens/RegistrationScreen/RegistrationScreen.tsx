@@ -23,6 +23,7 @@ import styles from "./styles";
 import {images} from "../../styles/images";
 import {regProps} from "../../navigation/NavigationStack";
 import BottomSheetBehavior from "reanimated-bottom-sheet";
+import {IRequestConfig} from "../../api/AuthUser";
 
 export const RegistrationScreen = (props: regProps) => {
   const navigation = props.navigation;
@@ -117,7 +118,7 @@ export const RegistrationScreen = (props: regProps) => {
   };
   const clearTextFieldsHandler: typeFields = {
     clearAllTextFields: () => {
-      setMailText(""), setPasText(""), setRepitePasText("");
+      setMailText(""); setPasText(""); setRepitePasText("");
     },
     clearMailField: () => {
       setMailText("");
@@ -129,7 +130,7 @@ export const RegistrationScreen = (props: regProps) => {
       setRepitePasText("");
     },
     clearPasAndRepitePasField: () => {
-      setPasText(""), setRepitePasText("");
+      setPasText(""); setRepitePasText("");
     },
   };
   type typeErrFields = {
@@ -174,14 +175,16 @@ export const RegistrationScreen = (props: regProps) => {
   };
   const mailString: string = mailText;
   const searchElement = mailString.includes("@");
+  const searchTwoElement = mailString.includes(".");
   const pasLength: number = pasText.length;
   const maxPassword: boolean = pasLength <= 16;
   const minPassword: boolean = pasLength >= 5;
-  const rightRepitePas: boolean = pasText === repitePasText;
+  const rightRepitePas: boolean = pasText == repitePasText;
   const notEmptyValue: boolean =
-    mailText !== "" && pasText !== "" && repitePasText !== "";
+    mailText != "" && pasText != "" && repitePasText != "";
   const validData: boolean =
-    searchElement === true &&
+    searchElement == true &&
+    searchTwoElement == true
     notEmptyValue &&
     maxPassword &&
     minPassword &&
@@ -195,11 +198,11 @@ export const RegistrationScreen = (props: regProps) => {
     errRightRepitePas: boolean;
   };
   const errorsHandler: typeErrors = {
-    emptyValue: mailText === "" || pasText === "" || repitePasText === "",
-    errMail: searchElement === false,
+    emptyValue: mailText == "" || pasText == "" || repitePasText == "",
+    errMail: searchElement == false||searchTwoElement == false,
     errPasswordMaxLength: pasLength > 16,
     errPasswordMinLength: pasLength < 5,
-    errRightRepitePas: pasText !== repitePasText,
+    errRightRepitePas: pasText != repitePasText,
   };
   type typeMessagesError = {
     errMessageEmptyValue: string;
@@ -220,12 +223,12 @@ export const RegistrationScreen = (props: regProps) => {
   const passwordSecuredHandler = (): void => {
     setPasswordSecured(!passwordSecured);
   };
-  const onRegisterSuccess = (result: any): void => {
+  const onRegisterSuccess = (result: IRequestConfig): void => {
     console.log(result);
     dispatch(saveUser(mailText, pasText, result.data));
     navigation.replace("HomeScreen");
   };
-  const onRegisterFailure = (reason: any): void => {
+  const onRegisterFailure = (reason: IRequestConfig): void => {
     console.log(reason);
     setServerErr(errorsMessage.errMessageServer);
   };
