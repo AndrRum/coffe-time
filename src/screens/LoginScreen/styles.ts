@@ -25,7 +25,8 @@ export default StyleSheet.create({
     fontFamily: fonts.SFUI_LIGHT,
     fontSize: 16,
     color: colors.WHITE,
-    marginLeft: 157,
+    alignSelf: "center",
+    marginLeft: 101,
     marginTop: -31,
     textShadowColor: colors.BLACK_SHADOW,
     textShadowOffset: {width: -1, height: 1},
@@ -39,7 +40,7 @@ export default StyleSheet.create({
     width: 300,
     alignItems: "center",
     borderRadius: 8,
-    marginLeft: 30,
+    alignSelf: "center",
     marginTop: 76,
   },
   textMailInput: {
@@ -57,7 +58,7 @@ export default StyleSheet.create({
     width: 300,
     alignItems: "center",
     borderRadius: 8,
-    marginLeft: 30,
+    alignSelf: "center",
   },
   textPasInput: {
     fontSize: 16,
@@ -68,7 +69,7 @@ export default StyleSheet.create({
   },
   confirmButton: {
     margin: 18,
-    marginLeft: 30,
+    alignSelf: "center",
     backgroundColor: colors.PINE_GLADE,
     borderRadius: 100,
     width: 300,
@@ -83,7 +84,7 @@ export default StyleSheet.create({
   },
   regButton: {
     marginBottom: 25,
-    marginLeft: 30,
+    alignSelf: "center",
     backgroundColor: colors.PINE_GLADE,
     borderRadius: 100,
     width: 300,
@@ -102,7 +103,7 @@ export default StyleSheet.create({
   },
   buttonFB: {
     marginTop: 40,
-    marginLeft: 30,
+    alignSelf: "center",
     backgroundColor: colors.CHAMBRAY,
     borderRadius: 100,
     width: 300,

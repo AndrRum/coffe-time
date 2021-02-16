@@ -25,7 +25,8 @@ export default StyleSheet.create({
     fontFamily: fonts.SFUI_LIGHT,
     fontSize: 16,
     color: "white",
-    marginLeft: 157,
+    alignSelf: "center",
+    marginLeft: 101,
     marginTop: -31,
     textShadowColor: colors.BLACK_SHADOW,
     textShadowOffset: {width: -1, height: 1},
@@ -34,7 +35,6 @@ export default StyleSheet.create({
   imageAvatar: {
     alignSelf: "center",
     marginTop: 30,
-    marginRight: 14,
     height: 142,
     width: 142,
     borderRadius: 100,
@@ -50,7 +50,7 @@ export default StyleSheet.create({
   },
   backBottomImage: {
     height: 275,
-    width: 365,
+    width: "100%",
   },
   galleryPhotoButton: {
     marginTop: 35,
@@ -90,7 +90,7 @@ export default StyleSheet.create({
     width: 300,
     alignItems: "center",
     borderRadius: 8,
-    marginLeft: 30,
+    alignSelf: "center",
     marginTop: 30,
   },
   mailInput: {
@@ -108,7 +108,7 @@ export default StyleSheet.create({
     width: 300,
     alignItems: "center",
     borderRadius: 8,
-    marginLeft: 30,
+    alignSelf: "center",
   },
   pasInput: {
     fontSize: 16,
@@ -119,7 +119,7 @@ export default StyleSheet.create({
   },
   confirmButton: {
     margin: 30,
-    marginLeft: 30,
+    alignSelf: "center",
     backgroundColor: colors.OLIVINE,
     borderRadius: 100,
     width: 300,
